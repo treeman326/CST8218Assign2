@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Random;
 
 /**
  *
@@ -45,6 +46,8 @@ public class Appuser implements Serializable {
     @Size(max = 255)
     @Column(name = "GROUPNAME")
     private String groupname;
+    @Column(name = "SALT")
+    private int salt;
 
     public Appuser() {
     }
@@ -55,7 +58,7 @@ public class Appuser implements Serializable {
 
     public Appuser(String userid, String password) {
         this.userid = userid;
-        this.password = hashWord(password);
+        this.setPassword(password);
     }
 
     public String getUserid() {
@@ -71,7 +74,12 @@ public class Appuser implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = hashWord(password);
+        if(password.equals("") || password==null){
+            return;
+        }
+        Random rng = new Random();
+        salt = rng.nextInt(255);
+        this.password = hashWord(password, salt);
     }
 
     public String getGroupname() {
@@ -89,8 +97,8 @@ public class Appuser implements Serializable {
         return hash;
     }
     
-    private String hashWord(String password){//Simple hash algorithm
-        long hash = 7;
+    private String hashWord(String password, int salt){//Simple hash algorithm
+        long hash = salt+1;
         for (int i = 0; i < password.length(); i++) {
             hash = hash*31 + password.charAt(i);
         }
