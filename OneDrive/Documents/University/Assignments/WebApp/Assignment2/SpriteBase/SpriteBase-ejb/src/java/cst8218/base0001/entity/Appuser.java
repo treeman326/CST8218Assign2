@@ -6,6 +6,9 @@
 package cst8218.base0001.entity;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.spi.CDI;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,14 +16,15 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.security.enterprise.identitystore.PasswordHash;
+import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Random;
 
 /**
- *
- * @author treem
+ * Entity class for the user table
+ * @author Patrick Hessian
  */
 @Entity
 @Table(name = "APPUSER")
@@ -46,8 +50,6 @@ public class Appuser implements Serializable {
     @Size(max = 255)
     @Column(name = "GROUPNAME")
     private String groupname;
-    @Column(name = "SALT")
-    private int salt;
 
     public Appuser() {
     }
@@ -73,13 +75,19 @@ public class Appuser implements Serializable {
         return "";
     }
 
+    /**
+     * Sets and hashes the password, leaves unchanged if empty
+     * @param password the unhashed password
+     */
     public void setPassword(String password) {
-        if(password.equals("") || password==null){
+        if ("".equals(password)) {
             return;
         }
-        Random rng = new Random();
-        salt = rng.nextInt(255);
-        this.password = hashWord(password, salt);
+        Instance<? extends PasswordHash> instance = CDI.current().select(Pbkdf2PasswordHash.class);
+        PasswordHash passwordHash = instance.get();
+        passwordHash.initialize(new HashMap<String,String>());
+        password = passwordHash.generate(password.toCharArray());
+        this.password = password;
     }
 
     public String getGroupname() {
@@ -95,14 +103,6 @@ public class Appuser implements Serializable {
         int hash = 0;
         hash += (userid != null ? userid.hashCode() : 0);
         return hash;
-    }
-    
-    private String hashWord(String password, int salt){//Simple hash algorithm
-        long hash = salt+1;
-        for (int i = 0; i < password.length(); i++) {
-            hash = hash*31 + password.charAt(i);
-        }
-        return Long.toString(hash);
     }
 
     @Override

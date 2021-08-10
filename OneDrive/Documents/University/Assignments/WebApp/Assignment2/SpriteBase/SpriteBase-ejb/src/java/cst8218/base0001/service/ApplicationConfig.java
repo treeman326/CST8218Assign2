@@ -6,13 +6,28 @@
 package cst8218.base0001.service;
 
 import java.util.Set;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
+import javax.security.enterprise.authentication.mechanism.http.BasicAuthenticationMechanismDefinition;
+import javax.security.enterprise.identitystore.DatabaseIdentityStoreDefinition;
+import javax.security.enterprise.identitystore.PasswordHash;
+import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
 /**
- *
- * @author Todd Kelley
+ * Configures authentication and RESTful resources
+ * @author Todd Kelley, Patrick Hessian
  */
-
+@DatabaseIdentityStoreDefinition(
+        dataSourceLookup = "${'java:comp/DefaultDataSource'}",
+        callerQuery = "#{'select PASSWORD from app.appuser where userid= ?'}",
+        groupsQuery = "select GROUPNAME from app.appuser where userid= ?",
+        hashAlgorithm = Pbkdf2PasswordHash.class,
+        priority = 10
+)
 @javax.ws.rs.ApplicationPath("webresources")
+@BasicAuthenticationMechanismDefinition
+@ApplicationScoped
+@Named
 public class ApplicationConfig extends javax.ws.rs.core.Application {
 
     @Override
@@ -22,6 +37,7 @@ public class ApplicationConfig extends javax.ws.rs.core.Application {
         return resources;
     }
 
+    
     /**
      * Do not modify addRestResourceClasses() method.
      * It is automatically populated with

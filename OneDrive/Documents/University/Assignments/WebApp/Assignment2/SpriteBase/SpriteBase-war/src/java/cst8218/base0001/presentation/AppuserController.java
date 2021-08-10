@@ -18,6 +18,10 @@ import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 
+/**
+ * Used to manipulate and view the appuser table
+ * @author Patrick Hessian
+ */
 @Named("appuserController")
 @SessionScoped
 public class AppuserController implements Serializable {

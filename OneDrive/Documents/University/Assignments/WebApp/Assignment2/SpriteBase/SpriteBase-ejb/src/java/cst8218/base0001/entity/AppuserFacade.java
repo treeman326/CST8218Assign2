@@ -10,8 +10,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- *
- * @author treem
+ * Connects the appuser table to the database
+ * @author Patrick Hessian
  */
 @Stateless
 public class AppuserFacade extends AbstractFacade<Appuser> {

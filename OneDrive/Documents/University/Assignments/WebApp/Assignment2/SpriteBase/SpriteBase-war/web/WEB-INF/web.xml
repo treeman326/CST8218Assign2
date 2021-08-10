@@ -21,7 +21,7 @@
     <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
-    
+    <!-- add security constraints to the JSF pages -->
     <security-constraint>
         <display-name>SecurityConstraint</display-name>
         <web-resource-collection>
@@ -34,5 +34,4 @@
             <role-name>Admin</role-name>
         </auth-constraint>
     </security-constraint>
-    
 </web-app>
