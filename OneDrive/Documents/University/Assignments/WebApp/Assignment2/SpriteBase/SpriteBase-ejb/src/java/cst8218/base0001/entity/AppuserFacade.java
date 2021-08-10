@@ -11,11 +11,11 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author tgk
+ * @author treem
  */
 @Stateless
-public class SpriteFacade extends AbstractFacade<Sprite> {
-    
+public class AppuserFacade extends AbstractFacade<Appuser> {
+
     @PersistenceContext(unitName = "SpriteBasePU")
     private EntityManager em;
 
@@ -24,8 +24,8 @@ public class SpriteFacade extends AbstractFacade<Sprite> {
         return em;
     }
 
-    public SpriteFacade() {
-        super(Sprite.class);
+    public AppuserFacade() {
+        super(Appuser.class);
     }
     
 }
