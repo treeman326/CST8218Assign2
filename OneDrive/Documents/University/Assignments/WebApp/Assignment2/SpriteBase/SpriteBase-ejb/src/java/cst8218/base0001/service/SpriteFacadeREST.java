@@ -13,10 +13,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- *
+ * This class declares and restricts the REST functions
  * @author Todd Kelley, Patrick Hessian
  */
-@DeclareRoles("{Admin,RestGroup}")
+@DeclareRoles("{Admin,RestGroup}")//these are the two roles used for the REST functions
 @javax.ejb.Stateless
 @javax.ws.rs.Path("cst8218.base0001.entity.sprite")
 public class SpriteFacadeREST extends cst8218.base0001.entity.AbstractFacade<Sprite> {
@@ -29,7 +29,7 @@ public class SpriteFacadeREST extends cst8218.base0001.entity.AbstractFacade<Spr
     }
 
     @javax.ws.rs.POST
-    @RolesAllowed({"RestGroup", "Admin"})
+    @RolesAllowed({"RestGroup", "Admin"})//only these roles can access this resource
     @Override
     @javax.ws.rs.Consumes({javax.ws.rs.core.MediaType.APPLICATION_XML, javax.ws.rs.core.MediaType.APPLICATION_JSON})
     public void create(Sprite entity) {
